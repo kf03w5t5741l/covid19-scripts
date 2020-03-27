@@ -1,5 +1,4 @@
 ### GitHub global dataset (updated after 24 hours) ###
-
 corona <- read.csv(url("https://raw.githubusercontent.com/datasets/covid-19/master/data/time-series-19-covid-combined.csv"))
 corona$Date <- as.Date(corona$Date)
 
@@ -66,56 +65,93 @@ ic_stats_nl$date <- as.Date(ic_stats_nl$date)
 rm(ic_new_admissions, ic_occupancy, ic_affected_hospitals, ic_cumulative, ic_deaths)
 
 ### Plot the data we collected ###
+covPlot <- function(x, y, ylim, main, ylab, hor_line) {
+  if (missing(ylab)) {
+    ylab = ""
+  }
+  
+  if (missing(ylim)) {
+    plot(x = x, y = y, xlab = "", ylab = ylab, main = main, sub = Sys.Date(), type = 'b')
+  } else {
+    plot(x = x, y = y, ylim = ylim, xlab = "", ylab = ylab, main = main, sub = Sys.Date(), type = 'b')
+  }
+  
+  grid()
+  text(x = x, y = y, labels = y, pos = 3, offset = 0.5, cex = 0.55)
+  
+  if (!missing(hor_line)) {
+    hor_line();
+  }
+}
 
-plot(x = ecdc_nl$dateRep, y = ecdc_nl$cumulDeaths, ylim = c(0, 1000), main = "COVID-19 cumulative deaths\nNetherlands", type = 'b')
-grid()
-text(x = ecdc_nl$dateRep, y = ecdc_nl$cumulDeaths, labels = ecdc_nl$cumulDeaths, pos = 3, offset = 0.5, cex = 0.55)
-abline(h=153363/365, col="orange")
+nl_daily_avg_deaths <- function() {
+  abline(h=153363/365, col="orange")
+}
 
-plot(x = ecdc_nl$dateRep, y = ecdc_nl$deaths, ylim = c(0, 150), main = "COVID-19 daily deaths\nNetherlands", type='b')
-grid()
-text(x = ecdc_nl$dateRep, y = ecdc_nl$deaths, labels = ecdc_nl$deaths, pos = 3, offset = 0.75, cex = 0.55)
-abline(h=153363/365, col="orange")
+covPlot(x = ecdc_nl$dateRep,
+        y = ecdc_nl$cumulDeaths,
+        ylim = c(0, 1000),
+        main = "COVID-19 cumulative deaths\nNetherlands",
+        hor_line = nl_daily_avg_deaths)
 
-plot(x = ecdc_uk$dateRep, y = ecdc_uk$cumulDeaths, ylim = c(0, 1000), main = "COVID-19 cumulative deaths\nUnited Kingdom", type='b')
-grid()
-text(x = ecdc_uk$dateRep, y = ecdc_uk$cumulDeaths, labels = ecdc_uk$cumulDeaths, pos = 3, offset = 0.75, cex = 0.55)
+covPlot(x = ecdc_nl$dateRep,
+        y = ecdc_nl$deaths,
+        ylim = c(0, 150),
+        main = "COVID-19 daily deaths\nNetherlands",
+        hor_line = nl_daily_avg_deaths)
 
-plot(x = ecdc_uk$dateRep, y = ecdc_uk$deaths, ylim = c(0, 250), main = "COVID-19 daily deaths\nUnited Kingdom", type='b')
-text(x = ecdc_uk$dateRep, y = ecdc_uk$deaths, labels = ecdc_uk$deaths, pos = 3, offset = 0.75, cex = 0.55)
-grid()
+covPlot(x = ecdc_uk$dateRep,
+        y = ecdc_uk$cumulDeaths,
+        ylim = c(0, 1000),
+        main = "COVID-19 cumulative deaths\nUnited Kingdom")
 
-plot(x = ecdc_de$dateRep, y = ecdc_de$cumulDeaths, ylim = c(0, 1000), main = "COVID-19 cumulative deaths\nGermany", type='b')
-grid()
-text(x = ecdc_de$dateRep, y = ecdc_de$cumulDeaths, labels = ecdc_de$cumulDeaths, pos = 3, offset = 0.75, cex = 0.55)
+covPlot(x = ecdc_uk$dateRep,
+        y = ecdc_uk$deaths,
+        ylim = c(0, 250),
+        main = "COVID-19 daily deaths\nUnited Kingdom")
 
-plot(x = ecdc_de$dateRep, y = ecdc_de$deaths, ylim = c(0, 150), main = "COVID-19 daily deaths\nGermany", type='b')
-grid()
-text(x = ecdc_de$dateRep, y = ecdc_de$deaths, labels = ecdc_de$deaths, pos = 3, offset = 0.75, cex = 0.55)
+covPlot(x = ecdc_de$dateRep,
+        y = ecdc_de$cumulDeaths,
+        ylim = c(0, 1000),
+        main = "COVID-19 cumulative deaths\nGermany")
 
-plot(x = ecdc_fr$dateRep, y = ecdc_fr$cumulDeaths, ylim = c(0, 2000), main = "COVID-19 cumulative deaths\nFrance", type='b')
-grid()
-text(x = ecdc_fr$dateRep, y = ecdc_fr$cumulDeaths, labels = ecdc_fr$cumulDeaths, pos = 3, offset = 0.75, cex = 0.55)
+covPlot(x = ecdc_de$dateRep,
+        y = ecdc_de$deaths,
+        ylim = c(0, 150),
+        main = "COVID-19 daily deaths\nGermany")
 
-plot(x = ecdc_fr$dateRep, y = ecdc_fr$deaths, ylim = c(0, 500), main = "COVID-19 daily deaths\nFrance", type='b')
-grid()
-text(x = ecdc_fr$dateRep, y = ecdc_fr$deaths, labels = ecdc_fr$deaths, pos = 3, offset = 0.75, cex = 0.55)
+covPlot(x = ecdc_fr$dateRep,
+        y = ecdc_fr$cumulDeaths,
+        ylim = c(0, 2000),
+        main = "COVID-19 cumulative deaths\nFrance")
 
-plot(x = ecdc_be$dateRep, y = ecdc_be$cumulDeaths, ylim = c(0, 1000), main = "COVID-19 cumulative deaths\nBelgium", type='b')
-grid()
-text(x = ecdc_be$dateRep, y = ecdc_be$cumulDeaths, labels = ecdc_be$cumulDeaths, pos = 3, offset = 0.75, cex = 0.55)
+covPlot(x = ecdc_fr$dateRep,
+        y = ecdc_fr$deaths,
+        ylim = c(0, 500),
+        main = "COVID-19 daily deaths\nFrance")
 
-plot(x = ecdc_be$dateRep, y = ecdc_be$deaths, ylim = c(0, 150), main = "COVID-19 daily deaths\nBelgium", type='b')
-grid()
-text(x = ecdc_be$dateRep, y = ecdc_be$deaths, labels = ecdc_be$deaths, pos = 3, offset = 0.75, cex = 0.55)
+covPlot(x = ecdc_be$dateRep,
+        y = ecdc_be$cumulDeaths,
+        ylim = c(0, 1000),
+        main = "COVID-19 cumulative deaths\nBelgium")
 
-plot(x = ic_stats_nl$date, y = ic_stats_nl$newIntake, main = "Daily COVID-19 IC intake\nNetherlands", type='h')
-grid()
-text(x = ic_stats_nl$date, y = ic_stats_nl$newIntake, labels = ic_stats_nl$newIntake, pos = 3, offset = 0.75, cex = 0.55)
+covPlot(x = ecdc_be$dateRep,
+        y = ecdc_be$deaths,
+        ylim = c(0, 150),
+        main = "COVID-19 daily deaths\nBelgium")
 
-plot(x = ic_stats_nl$date, y = ic_stats_nl$intakeCount, ylim = c(0, 1450), main = "COVID-19 patients in IC\nNetherlands", type='b')
-grid()
-text(x = ic_stats_nl$date, y = ic_stats_nl$intakeCount, labels = ic_stats_nl$intakeCount, pos = 3, offset = 0.75, cex = 0.55)
-abline(h=1150, col="green")
-abline(h=1400, col="orange")
-abline(h=1600, col="red")
+covPlot(x = ic_stats_nl$date,
+        y = ic_stats_nl$newIntake,
+        main = "Daily COVID-19 IC intake\nNetherlands")
+
+ic_capacity_lines <- function() {
+  abline(h=1150, col="green")
+  abline(h=1400, col="orange")
+  abline(h=1600, col="red")
+}
+
+covPlot(x = ic_stats_nl$date,
+        y = ic_stats_nl$intakeCount,
+        ylim = c(0, 1600),
+        main = "COVID-19 patients in IC\nNetherlands",
+        hor_line = ic_capacity_lines)
