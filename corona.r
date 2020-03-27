@@ -16,10 +16,7 @@ corona_be <- subset(corona, Country.Region == "Belgium")
 corona_be <- subset(corona_be, corona_be$Date > as.Date("2020-02-25"))
 
 ### EU ECDC data (updated every morning 06:00-10:00 CET) ###
-#install.packages('jsonlite', 'curl')
-library(jsonlite)
-ecdc <-fromJSON("http://opendata.ecdc.europa.eu/covid19/casedistribution/json")
-ecdc <- ecdc$records
+ecdc <- read.csv(url("http://opendata.ecdc.europa.eu/covid19/casedistribution/csv"))
 ecdc$dateRep <- as.Date(ecdc$dateRep, format = "%d/%m/%Y")
 
 ecdc <- ecdc[order(ecdc$'countriesAndTerritories', as.Date(ecdc$dateRep)),]
@@ -42,7 +39,6 @@ ecdc_be <- subset(ecdc_be, dateRep > as.Date("2020-02-25"))
 
 
 ### Stichting Nice Intensive Care statistics for the Netherlands (updated continuously) ###
-
 #install.packages('jsonlite', 'curl')
 library(jsonlite)
 
