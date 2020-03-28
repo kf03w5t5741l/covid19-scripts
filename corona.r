@@ -1,3 +1,6 @@
+### Global variables ###
+startDate = as.Date("2020-03-01")
+
 ### GitHub global dataset - currently unused (updated after 24 hours) ###
 
 #corona <- read.csv(url("https://raw.githubusercontent.com/datasets/covid-19/master/data/time-series-19-covid-combined.csv"))
@@ -11,19 +14,19 @@ ecdc <- ecdc[order(ecdc$'countriesAndTerritories', as.Date(ecdc$dateRep)),]
 ecdc$cumulDeaths <- ave(ecdc$deaths, ecdc$geoId, FUN=cumsum)
 
 ecdc_nl <- subset(ecdc, geoId == 'NL')
-ecdc_nl <- subset(ecdc_nl, dateRep > as.Date("2020-02-25"))
+ecdc_nl <- subset(ecdc_nl, dateRep >= startDate)
 
 ecdc_uk <- subset(ecdc, geoId == 'UK')
-ecdc_uk <- subset(ecdc_uk, dateRep > as.Date("2020-02-25"))
+ecdc_uk <- subset(ecdc_uk, dateRep >= startDate)
 
 ecdc_de <- subset(ecdc, geoId == 'DE')
-ecdc_de <- subset(ecdc_de, dateRep > as.Date("2020-02-25"))
+ecdc_de <- subset(ecdc_de, dateRep >= startDate)
 
 ecdc_fr <- subset(ecdc, geoId == 'FR')
-ecdc_fr <- subset(ecdc_fr, dateRep > as.Date("2020-02-25"))
+ecdc_fr <- subset(ecdc_fr, dateRep >= startDate)
 
 ecdc_be <- subset(ecdc, geoId == 'BE')
-ecdc_be <- subset(ecdc_be, dateRep > as.Date("2020-02-25"))
+ecdc_be <- subset(ecdc_be, dateRep >= startDate)
 
 
 ### Stichting Nice Intensive Care statistics for the Netherlands (updated continuously) ###
@@ -51,6 +54,7 @@ ic_stats_nl <- merge(ic_stats_nl, ic_affected_hospitals, by="date", all=TRUE)
 ic_stats_nl <- merge(ic_stats_nl, ic_cumulative, by="date", all=TRUE)
 ic_stats_nl <- merge(ic_stats_nl, ic_deaths, by="date", all=TRUE)
 ic_stats_nl$date <- as.Date(ic_stats_nl$date)
+ic_stats_nl <- subset(ic_stats_nl, ic_stats_nl$date >= startDate)
 ic_stats_nl <- subset(ic_stats_nl, ic_stats_nl$date < Sys.Date()) # Exclude current day's data
 
 rm(ic_new_admissions, ic_occupancy, ic_affected_hospitals, ic_cumulative, ic_deaths)
