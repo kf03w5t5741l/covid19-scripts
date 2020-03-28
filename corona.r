@@ -1,4 +1,5 @@
-### GitHub global dataset (updated after 24 hours) ###
+### GitHub global dataset - currently unused (updated after 24 hours) ###
+
 #corona <- read.csv(url("https://raw.githubusercontent.com/datasets/covid-19/master/data/time-series-19-covid-combined.csv"))
 #corona$Date <- as.Date(corona$Date)
 
@@ -26,6 +27,7 @@ ecdc_be <- subset(ecdc_be, dateRep > as.Date("2020-02-25"))
 
 
 ### Stichting Nice Intensive Care statistics for the Netherlands (updated continuously) ###
+
 #install.packages('jsonlite', 'curl')
 library(jsonlite)
 
@@ -54,15 +56,19 @@ ic_stats_nl <- subset(ic_stats_nl, ic_stats_nl$date < Sys.Date()) # Exclude curr
 rm(ic_new_admissions, ic_occupancy, ic_affected_hospitals, ic_cumulative, ic_deaths)
 
 ### Plot the data we collected ###
+
+# Helper function for our repetitive plot() calls
 covPlot <- function(x, y, ylim, main, ylab, hor_line) {
   if (missing(ylab)) {
     ylab = ""
   }
   
+  sub = paste(sep = "", "Generated: ", Sys.Date(), ", data as at: ", (Sys.Date() - 1))
+  
   if (missing(ylim)) {
-    plot(x = x, y = y, xlab = "", ylab = ylab, main = main, sub = Sys.Date(), type = 'b')
+    plot(x = x, y = y, xlab = "", ylab = ylab, main = main, sub = sub, type = 'b')
   } else {
-    plot(x = x, y = y, ylim = ylim, xlab = "", ylab = ylab, main = main, sub = Sys.Date(), type = 'b')
+    plot(x = x, y = y, ylim = ylim, xlab = "", ylab = ylab, main = main, sub = sub, type = 'b')
   }
   
   grid()
@@ -73,86 +79,108 @@ covPlot <- function(x, y, ylim, main, ylab, hor_line) {
   }
 }
 
-nl_daily_avg_deaths <- function() {
-  abline(h=153363/365, col="orange")
+# Function to plot all data
+plot_all <- function () {
+  # Draw a horizontal line showing the average daily deaths in the Netherlands in 2018
+  nl_daily_avg_deaths <- function() {
+    abline(h=153363/365, col="orange")
+  }
+  
+  covPlot(x = ecdc_nl$dateRep,
+          y = ecdc_nl$cumulDeaths,
+          ylim = c(0, 1000),
+          ylab = "Cumulative deaths",
+          main = "COVID-19 cumulative deaths\nNetherlands",
+          hor_line = nl_daily_avg_deaths)
+  
+  covPlot(x = ecdc_nl$dateRep,
+          y = ecdc_nl$deaths,
+          ylim = c(0, 150),
+          ylab = "Deaths",
+          main = "COVID-19 daily deaths\nNetherlands",
+          hor_line = nl_daily_avg_deaths)
+  
+  covPlot(x = ecdc_uk$dateRep,
+          y = ecdc_uk$cumulDeaths,
+          ylim = c(0, 1000),
+          ylab = "Cumulative deaths",
+          main = "COVID-19 cumulative deaths\nUnited Kingdom")
+  
+  covPlot(x = ecdc_uk$dateRep,
+          y = ecdc_uk$deaths,
+          ylim = c(0, 250),
+          ylab = "Deaths",
+          main = "COVID-19 daily deaths\nUnited Kingdom")
+  
+  covPlot(x = ecdc_de$dateRep,
+          y = ecdc_de$cumulDeaths,
+          ylim = c(0, 1000),
+          ylab = "Cumulative deaths",
+          main = "COVID-19 cumulative deaths\nGermany")
+  
+  covPlot(x = ecdc_de$dateRep,
+          y = ecdc_de$deaths,
+          ylim = c(0, 150),
+          ylab = "Deaths",
+          main = "COVID-19 daily deaths\nGermany")
+  
+  covPlot(x = ecdc_fr$dateRep,
+          y = ecdc_fr$cumulDeaths,
+          ylim = c(0, 2000),
+          ylab = "Cumulative deaths",
+          main = "COVID-19 cumulative deaths\nFrance")
+  
+  covPlot(x = ecdc_fr$dateRep,
+          y = ecdc_fr$deaths,
+          ylim = c(0, 500),
+          ylab = "Deaths",
+          main = "COVID-19 daily deaths\nFrance")
+  
+  covPlot(x = ecdc_be$dateRep,
+          y = ecdc_be$cumulDeaths,
+          ylim = c(0, 1000),
+          ylab = "Cumulative deaths",
+          main = "COVID-19 cumulative deaths\nBelgium")
+  
+  covPlot(x = ecdc_be$dateRep,
+          y = ecdc_be$deaths,
+          ylim = c(0, 150),
+          ylab = "Deaths",
+          main = "COVID-19 daily deaths\nBelgium")
+  
+  covPlot(x = ic_stats_nl$date,
+          y = ic_stats_nl$newIntake,
+          ylab = "Admissions",
+          main = "Daily COVID-19 intensive care admissions\nNetherlands")
+  
+  # Draw three horizontal lines depiciting anticipated intensive care capacity in the Netherlands
+  ic_capacity_lines <- function() {
+    abline(h=1150, col="green")
+    abline(h=1400, col="orange")
+    abline(h=1600, col="red")
+  }
+  
+  covPlot(x = ic_stats_nl$date,
+          y = ic_stats_nl$intakeCount,
+          ylim = c(0, 1600),
+          main = "COVID-19 patients in intensive care\nNetherlands",
+          ylab = "Patients",
+          hor_line = ic_capacity_lines)
 }
 
-covPlot(x = ecdc_nl$dateRep,
-        y = ecdc_nl$cumulDeaths,
-        ylim = c(0, 1000),
-        ylab = "Cumulative deaths",
-        main = "COVID-19 cumulative deaths\nNetherlands",
-        hor_line = nl_daily_avg_deaths)
+### Generate plots on screen ###
 
-covPlot(x = ecdc_nl$dateRep,
-        y = ecdc_nl$deaths,
-        ylim = c(0, 150),
-        ylab = "Deaths",
-        main = "COVID-19 daily deaths\nNetherlands",
-        hor_line = nl_daily_avg_deaths)
+plot_all()
 
-covPlot(x = ecdc_uk$dateRep,
-        y = ecdc_uk$cumulDeaths,
-        ylim = c(0, 1000),
-        ylab = "Cumulative deaths",
-        main = "COVID-19 cumulative deaths\nUnited Kingdom")
+#### Save plots as PDF ###
 
-covPlot(x = ecdc_uk$dateRep,
-        y = ecdc_uk$deaths,
-        ylim = c(0, 250),
-        ylab = "Deaths",
-        main = "COVID-19 daily deaths\nUnited Kingdom")
+# Prepare PDF
+pdf(file = paste(format(Sys.Date(), format = "%y%m%d"), "covplots.pdf", sep = "-"), paper = "a4", width = 10, height = 15)
+#Set up two plots per image
+par(mfrow = c(2, 1))
 
-covPlot(x = ecdc_de$dateRep,
-        y = ecdc_de$cumulDeaths,
-        ylim = c(0, 1000),
-        ylab = "Cumulative deaths",
-        main = "COVID-19 cumulative deaths\nGermany")
+# Generate plots
+plot_all()
 
-covPlot(x = ecdc_de$dateRep,
-        y = ecdc_de$deaths,
-        ylim = c(0, 150),
-        ylab = "Deaths",
-        main = "COVID-19 daily deaths\nGermany")
-
-covPlot(x = ecdc_fr$dateRep,
-        y = ecdc_fr$cumulDeaths,
-        ylim = c(0, 2000),
-        ylab = "Cumulative deaths",
-        main = "COVID-19 cumulative deaths\nFrance")
-
-covPlot(x = ecdc_fr$dateRep,
-        y = ecdc_fr$deaths,
-        ylim = c(0, 500),
-        ylab = "Deaths",
-        main = "COVID-19 daily deaths\nFrance")
-
-covPlot(x = ecdc_be$dateRep,
-        y = ecdc_be$cumulDeaths,
-        ylim = c(0, 1000),
-        ylab = "Cumulative deaths",
-        main = "COVID-19 cumulative deaths\nBelgium")
-
-covPlot(x = ecdc_be$dateRep,
-        y = ecdc_be$deaths,
-        ylim = c(0, 150),
-        ylab = "Deaths",
-        main = "COVID-19 daily deaths\nBelgium")
-
-covPlot(x = ic_stats_nl$date,
-        y = ic_stats_nl$newIntake,
-        ylab = "Admissions",
-        main = "Daily COVID-19 intensive care admissions\nNetherlands")
-
-ic_capacity_lines <- function() {
-  abline(h=1150, col="green")
-  abline(h=1400, col="orange")
-  abline(h=1600, col="red")
-}
-
-covPlot(x = ic_stats_nl$date,
-        y = ic_stats_nl$intakeCount,
-        ylim = c(0, 1600),
-        main = "COVID-19 patients in intensive care\nNetherlands",
-        ylab = "Patients",
-        hor_line = ic_capacity_lines)
+# Write plots to PDF
+dev.off()
