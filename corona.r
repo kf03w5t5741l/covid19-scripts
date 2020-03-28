@@ -31,7 +31,6 @@ library(jsonlite)
 
 ic_new_admissions <- fromJSON("https://www.stichting-nice.nl/covid-19/public/new-intake/")
 ic_new_admissions <- subset(ic_new_admissions, select = c("date", "newIntake"))
-ic_new_admissions <- subset(ic_new_admissions, ic_new_admissions$date < Sys.Date())
 
 ic_occupancy <- fromJSON("https://www.stichting-nice.nl/covid-19/public/intake-count/")
 ic_occupancy <- subset(ic_occupancy, select = c("date", "intakeCount"))
@@ -50,6 +49,7 @@ ic_stats_nl <- merge(ic_stats_nl, ic_affected_hospitals, by="date", all=TRUE)
 ic_stats_nl <- merge(ic_stats_nl, ic_cumulative, by="date", all=TRUE)
 ic_stats_nl <- merge(ic_stats_nl, ic_deaths, by="date", all=TRUE)
 ic_stats_nl$date <- as.Date(ic_stats_nl$date)
+ic_stats_nl <- subset(ic_stats_nl, ic_stats_nl$date < Sys.Date()) # Exclude current day's data
 
 rm(ic_new_admissions, ic_occupancy, ic_affected_hospitals, ic_cumulative, ic_deaths)
 
