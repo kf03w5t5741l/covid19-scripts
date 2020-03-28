@@ -1,18 +1,6 @@
 ### GitHub global dataset (updated after 24 hours) ###
-corona <- read.csv(url("https://raw.githubusercontent.com/datasets/covid-19/master/data/time-series-19-covid-combined.csv"))
-corona$Date <- as.Date(corona$Date)
-
-corona_nl <- subset(corona, Country.Region == "Netherlands" & Province.State == "Netherlands")
-corona_nl <- subset(corona_nl, corona_nl$Date > as.Date("2020-02-25"))
-
-corona_uk <- subset(corona, Country.Region == "United Kingdom" & Province.State == "United Kingdom")
-corona_uk <- subset(corona_uk, corona_uk$Date > as.Date("2020-02-25"))
-corona_de <- subset(corona, Country.Region == "Germany")
-corona_de <- subset(corona_de, corona_de$Date > as.Date("2020-02-25"))
-corona_fr <- subset(corona, Country.Region == "France" & Province.State == "France")
-corona_fr <- subset(corona_fr, corona_fr$Date > as.Date("2020-02-25"))
-corona_be <- subset(corona, Country.Region == "Belgium")
-corona_be <- subset(corona_be, corona_be$Date > as.Date("2020-02-25"))
+#corona <- read.csv(url("https://raw.githubusercontent.com/datasets/covid-19/master/data/time-series-19-covid-combined.csv"))
+#corona$Date <- as.Date(corona$Date)
 
 ### EU ECDC data (updated every morning 06:00-10:00 CET) ###
 ecdc <- read.csv(url("http://opendata.ecdc.europa.eu/covid19/casedistribution/csv"))
