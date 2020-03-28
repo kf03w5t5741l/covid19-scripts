@@ -1,4 +1,4 @@
-# COVID-19 statistics
+# COVID-19 data
 
 Plot daily and cumulative COVID-19 deaths for the Netherlands, the United Kingdom, Germany, France and Belgium. Also plot daily admissions to intensive care in the Netherlands as well as the total intensive care occupancy rate.
 
