@@ -176,6 +176,7 @@ plot_all()
 
 # Prepare PDF
 pdf(file = paste(format(Sys.Date(), format = "%y%m%d"), "covplots.pdf", sep = "-"), paper = "a4", width = 10, height = 15)
+
 #Set up two plots per image
 par(mfrow = c(2, 1))
 
