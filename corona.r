@@ -80,58 +80,69 @@ nl_daily_avg_deaths <- function() {
 covPlot(x = ecdc_nl$dateRep,
         y = ecdc_nl$cumulDeaths,
         ylim = c(0, 1000),
+        ylab = "Cumulative deaths",
         main = "COVID-19 cumulative deaths\nNetherlands",
         hor_line = nl_daily_avg_deaths)
 
 covPlot(x = ecdc_nl$dateRep,
         y = ecdc_nl$deaths,
         ylim = c(0, 150),
+        ylab = "Deaths",
         main = "COVID-19 daily deaths\nNetherlands",
         hor_line = nl_daily_avg_deaths)
 
 covPlot(x = ecdc_uk$dateRep,
         y = ecdc_uk$cumulDeaths,
         ylim = c(0, 1000),
+        ylab = "Cumulative deaths",
         main = "COVID-19 cumulative deaths\nUnited Kingdom")
 
 covPlot(x = ecdc_uk$dateRep,
         y = ecdc_uk$deaths,
         ylim = c(0, 250),
+        ylab = "Deaths",
         main = "COVID-19 daily deaths\nUnited Kingdom")
 
 covPlot(x = ecdc_de$dateRep,
         y = ecdc_de$cumulDeaths,
         ylim = c(0, 1000),
+        ylab = "Cumulative deaths",
         main = "COVID-19 cumulative deaths\nGermany")
 
 covPlot(x = ecdc_de$dateRep,
         y = ecdc_de$deaths,
         ylim = c(0, 150),
+        ylab = "Deaths",
         main = "COVID-19 daily deaths\nGermany")
 
 covPlot(x = ecdc_fr$dateRep,
         y = ecdc_fr$cumulDeaths,
         ylim = c(0, 2000),
+        ylab = "Cumulative deaths",
         main = "COVID-19 cumulative deaths\nFrance")
 
 covPlot(x = ecdc_fr$dateRep,
         y = ecdc_fr$deaths,
         ylim = c(0, 500),
+        ylab = "Deaths",
         main = "COVID-19 daily deaths\nFrance")
 
 covPlot(x = ecdc_be$dateRep,
         y = ecdc_be$cumulDeaths,
         ylim = c(0, 1000),
+        ylab = "Cumulative deaths",
         main = "COVID-19 cumulative deaths\nBelgium")
 
 covPlot(x = ecdc_be$dateRep,
         y = ecdc_be$deaths,
         ylim = c(0, 150),
+        ylab = "Deaths",
         main = "COVID-19 daily deaths\nBelgium")
 
 covPlot(x = ic_stats_nl$date,
         y = ic_stats_nl$newIntake,
-        main = "Daily COVID-19 IC intake\nNetherlands")
+        ylab = "Admissions",
+        main = "Daily COVID-19 intensive care admissions\nNetherlands")
 
 ic_capacity_lines <- function() {
   abline(h=1150, col="green")
@@ -142,5 +153,6 @@ ic_capacity_lines <- function() {
 covPlot(x = ic_stats_nl$date,
         y = ic_stats_nl$intakeCount,
         ylim = c(0, 1600),
-        main = "COVID-19 patients in IC\nNetherlands",
+        main = "COVID-19 patients in intensive care\nNetherlands",
+        ylab = "Patients",
         hor_line = ic_capacity_lines)
